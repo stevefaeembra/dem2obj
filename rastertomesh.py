@@ -52,7 +52,9 @@ class RasterReader:
     def get_metadata(self, filename):
         metadata = {}
         with rasterio.open(filename, 'r') as src:
-            matrix = src.affine
+            ## Alias 'affine' no longer works for 'transform'
+            ##matrix = src.affine
+            matrix = src.transform
             tl_x, tl_y = matrix * (0, 0)
             br_x, br_y = matrix * (src.width - 1, src.height - 1)
             metadata["center_x"] = (tl_x + br_x) / 2.0
@@ -70,7 +72,9 @@ class RasterReader:
         :return: series of (x,y,z)
         """
         with rasterio.open(filename, 'r') as src:
-            matrix = src.affine
+            ## Alias 'affine' no longer works for 'transform'
+            ##matrix = src.affine
+            matrix = src.transform
             self.size = (src.width, src.height)
             # read per scan line
             for row in range(0, src.height):
